@@ -4,7 +4,7 @@ type Props = {
   children?: React.ReactNode
 }
 
-export default (props: Props) => (
+const Layout = (props: Props) => (
   <div id="wrapper">
     <Sidebar />
 
@@ -28,3 +28,5 @@ export default (props: Props) => (
     </div>
   </div>
 )
+
+export default Layout
