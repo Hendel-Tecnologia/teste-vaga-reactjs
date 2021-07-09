@@ -5,7 +5,7 @@ import { ProductRepositoty } from '../../domain/repositories/product.repository'
 import { httpClient } from '../config/http-client'
 import { productCollectionMapper } from '../mappers/product.mapper'
 
-export class IProductDepository implements ProductRepositoty{
+export class IProductDepository implements ProductRepositoty {
   async getProducts(): Promise<Collection<ProductCollectionItem>> {
     const response = await httpClient.get('products')
     return productCollectionMapper(response.data)
