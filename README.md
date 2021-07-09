@@ -30,6 +30,8 @@ yarn
 yarn start
 ```
 
+__OBS: Após finalizado o teste, o candidato deverá subir o projeto em seu github e nos enviar o link__
+
 ## API Documentation
 - Product
   - [list](#list-products)
@@ -85,6 +87,14 @@ List of all possible predicates
 | `*_gteq` | greater than or equal | |
 
 Example: `GET /products?q[quantity_eq]=0`
+
+#### Pagination
+
+The following parameters are used for paging:
+  - `page` (default 20)
+  - `page_size` (default 1)
+
+Example: `GET /products?page=2&page_size=5`
 
 ### Get Product details
 ```
