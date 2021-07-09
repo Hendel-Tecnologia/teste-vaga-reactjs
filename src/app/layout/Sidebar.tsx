@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default () => (
   <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -11,9 +13,10 @@ export default () => (
     <hr className="sidebar-divider my-0" />
 
     <li className="nav-item">
-      <a className="nav-link" href="index.html">
+      <Link to='/' className="nav-link">
         <i className="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>Dashboard</span>
+      </Link>
     </li>
 
     <hr className="sidebar-divider" />
@@ -23,9 +26,10 @@ export default () => (
     </div>
 
     <li className="nav-item active">
-      <a className="nav-link" href="#">
+      <Link to='/' className="nav-link">
         <i className="fas fa-fw fa-table"></i>
-        <span>Produtos</span></a>
+        <span>Produtos</span>
+      </Link>
     </li>
   </ul>
 )
