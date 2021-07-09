@@ -1,46 +1,258 @@
-# Getting Started with Create React App
+# Mini Projeto Vaga FrontEnd ReactJS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+O objetivo deste mini projeto é implementar tarefas adicionais ao admin em react deste repositório, que consiste em gerenciar o catálogo de produtos de um e-commerce.
 
-## Available Scripts
+![img](screenshot.png)
 
-In the project directory, you can run:
+### Tarefas:
+1. Adicionar paginação a listagem de produtos (manter a paginação após reload da página)
+2. Permitir filtra a listagem de produtos com base nos campos de busca disponíveis
+3. Exibir todas as informações do produto na página de Detalhes do produto
+4. Exibir um "loading" no carregamento das páginas
+5. Permitir adicionar e remover Produtos relacionados na página de detalhes do produto
+6. Previnir requisições duplicadas ao adicionar ou remover um produto relacionado. Ex: O usuário clica de enviar um formulário e antes da requisição terminar ele clica novamente.
 
-### `yarn start`
+### Rodando o projeto
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+git clone git@github.com:Hendel-Tecnologia/teste-vaga-reactjs.git
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+cd teste-vaga-reactjs
+```
 
-### `yarn test`
+```bash
+yarn
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+yarn start
+```
 
-### `yarn build`
+## API Documentation
+- Product
+  - [list](#list-products)
+  - [get details](#get-product-details)
+  - [create](#create-a-product)
+  - [update](#update-a-product)
+  - [delete](#delete-a-product)
+  - [add related product](#add-related-product)
+  - [remove related product](#remove-related-product)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### List Products
+```
+GET /products
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```json
+// response body, status: 200
+{
+  "current_page": 1,
+  "prev_page": null,
+  "next_page": 2,
+  "page_size": 20,
+  "total_pages": 25,
+  "total_row_count": 500,
+  "data": [
+    {
+      "id": 1,
+      "name": "Sleek Cotton Shoes",
+      "description": "A ab est.Quis rem quia.Totam recusandae rem.",
+      "price": "25.3",
+      "quantity": 21,
+      "created_at": "2021-07-07T04:24:25.286Z",
+      "updated_at": "2021-07-07T04:24:25.286Z"
+    }
+  ]
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Search Matchers
 
-### `yarn eject`
+List of all possible predicates
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+| Predicate | Description | Notes |
+| ------------- | ------------- |-------- |
+| `*_eq`  | equal  | |
+| `*_not_eq` | not equal | |
+| `*_cont` | Contains value | uses `LIKE` |
+| `*_cont_any` | Contains any of | |
+| `*_cont_all` | Contains all of | |
+| `*_lt` | less than | |
+| `*_lteq` | less than or equal | |
+| `*_gt` | greater than | |
+| `*_gteq` | greater than or equal | |
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Example: `GET /products?q[quantity_eq]=0`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Get Product details
+```
+GET /products/:id
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```json
+// response body, status: 200
+{
+  "id": 1,
+  "name": "Product test",
+  "description": "Description of product test",
+  "price": "10.99",
+  "quantity": 50,
+  "created_at": "2021-07-05T23:13:17.383Z",
+  "created_at": "2021-07-05T23:13:17.383Z",
+  "related_products": [
+    {
+      "id": 2,
+      "name": "Product test 2",
+      "price": "10.99",
+      "main_product_id": 1
+    },
+    {
+      "id": 3,
+      "name": "Product test 3",
+      "price": "10.99",
+      "main_product_id": 1
+    }
+  ]
+}
+```
 
-## Learn More
+```json
+// response body, status: 404
+{
+  "errors": ["Couldn't find Product with 'id'=22"]
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Create a Product
+```
+POST /products
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```json
+// request body
+{
+  "name": "Product test",
+  "description": "Description of product test",
+  "price": "10.99",
+  "quantity": 50,
+}
+```
+
+```json
+// response body, status: 201
+{
+  "id": 1,
+  "name": "Product test",
+  "description": "Description of product test",
+  "price": "10.99",
+  "quantity": 50,
+  "created_at": "2021-07-05T23:13:17.383Z",
+  "created_at": "2021-07-05T23:13:17.383Z"
+}
+```
+
+```json
+// response body, status: 422
+{
+  "errors": ["Name has already been taken"]
+}
+```
+
+### Update a Product
+```
+PUT/PATCH /products
+```
+
+```json
+// request body
+{
+  "description": "NEW Description of product test",
+}
+```
+
+```json
+// response body, status: 201
+{
+  "id": 1,
+  "name": "Product test",
+  "description": "NEW Description of product test",
+  "price": "10.99",
+  "quantity": 50,
+  "created_at": "2021-07-05T23:13:17.383Z",
+  "created_at": "2021-07-05T23:13:17.383Z"
+}
+```
+
+```json
+// response body, status: 422
+{
+  "errors": ["Description can't be blank"]
+}
+```
+
+### Delete a Product
+
+```
+DELETE /products/:id
+```
+
+```json
+// response body, status: 204
+null
+```
+
+```json
+// response body, status: 404
+{
+  "errors": ["Couldn't find Product with 'id'=22"]
+}
+```
+
+### Add Related Product
+```
+POST /products/:product_id/related_products
+```
+
+```json
+// request body
+{
+  "related_product_id": 22
+}
+```
+
+```json
+// response body, status: 201
+{
+  "id": 22,
+  "name": "Product test",
+  "price": "10.99",
+  "main_product_id": 1
+}
+```
+
+```json
+// response body, status: 404|422
+{
+  "errors": ["Mensagem de erro"]
+}
+```
+
+### Remove Related Product
+
+```
+DELETE /products/:product_id/related_products/:related_product_id
+```
+
+```json
+// response body, status: 204
+null
+```
+
+```json
+// response body, status: 404
+{
+  "errors": ["Mensagem de erro"]
+}
+```
