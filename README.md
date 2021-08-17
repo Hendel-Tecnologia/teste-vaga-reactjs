@@ -172,7 +172,7 @@ POST /products
 
 ### Update a Product
 ```
-PUT/PATCH /products
+PUT/PATCH /products/:id
 ```
 
 ```json
